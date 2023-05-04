@@ -1,0 +1,58 @@
+
+version: "3.9"
+
+services:
+  postgres:
+    container_name: postgres-departament
+    hostname: postgres-departament
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: postgres
+      POSTGRES_DB: departament-dev
+    networks:
+      - departament-dev-network
+    ports:
+      - "5432:5432"
+
+  cache:
+    hostname: redis
+    image: redis:7.0.8-alpine
+    networks:
+      - departament-dev-network
+
+  nginx_departament:
+    hostname: departament-nginx
+    build: ./nginx
+    volumes:
+      - .:/var/www/app
+    depends_on:
+      - postgres
+      - fpm_departament
+
+    networks:
+      - departament-dev-network
+    ports:
+      - "8080:80"
+      - "5173:5173"
+
+  fpm_departament:
+    hostname: fpm_departament
+    container_name: fpm_departament
+    build: ./fpm
+    working_dir: /var/www/app
+    volumes:
+      - .:/var/www/app
+    depends_on:
+      - postgres
+    networks:
+      - departament-dev-network   
+
+
+networks:
+  departament-dev-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "171.0.0.0/24"
