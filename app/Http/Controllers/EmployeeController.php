@@ -14,7 +14,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return Employee::all();
+        return Employee::with(['departament'])->get();
     }
 
     /**
@@ -46,7 +46,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        return Employee::findOrFail($id);
+        return Employee::with(['departament'])->findOrFail($id);
     }
 
     /**

@@ -14,7 +14,7 @@ class DepartamentController extends Controller
      */
     public function index()
     {
-        return Departament::all();
+        return Departament::with(['employees'])->get();
     }
 
     /**
@@ -46,7 +46,7 @@ class DepartamentController extends Controller
      */
     public function show($id)
     {
-        return Departament::findOrFail($id);
+        return Departament::with(['employees'])->findOrFail($id);
     }
 
     /**

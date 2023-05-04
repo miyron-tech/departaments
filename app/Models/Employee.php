@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Employee extends Model
 {
@@ -28,4 +29,8 @@ class Employee extends Model
      * @var array<string, string>
      */
     protected $casts = [];
+
+    public function departament(): BelongsTo{
+        return $this->belongsTo(Departament::class, 'departament_id');
+    }
 }
